@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+    <style>
+ 
+        *{margin: 0;}
+
+        .header{
+            width: 1100px;
+            height: 40px;
+            position: relative;
+            background-color: rgb(130, 217, 255);
+        }
+        .button-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);   
+         display: flex;
+         gap: 130px;
+
+ 
+        }
+        
+        h2 {
+            margin: 0; /* 여백 제거 */
+            font-size: 30px; /* 제목 크기 설정 */
+        }
+
+
+
+        table{
+            width: 1100px;
+            height: 800px;
+        }
+  
+        td {
+            background-color: rgb(220, 184, 184);
+         
+            text-align: center; /* 텍스트 중앙 정렬 */
+            vertical-align: top; /* 텍스트 위쪽 정렬 */
+            font-size: 24px; /* 글자 크기 조정 */
+        }
+
+        #prevButton{
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent; /* 위쪽 경계선 투명 */
+            border-bottom: 20px solid transparent; /* 아래쪽 경계선 투명 */
+            border-right: 20px solid white; /* 오른쪽 경계선 흰색 */
+        }
+        #nextButton {
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent; /* 위쪽 경계선 투명 */
+            border-bottom: 20px solid transparent; /* 아래쪽 경계선 투명 */
+            border-left: 20px solid white; /* 왼쪽 경계선 흰색 */
+
+        }
+   
+        
+    </style>
+</head>
+<body>
+    <div class="mainbox">
+        <div class="header">
+            <div class="button-container">
+                <div id="prevButton"></div>
+                <div id="calendarTitle"></div>
+                <div id="nextButton"></div>
+            </div>
+        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <th>일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th>토</th>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td id="d0"></td>
+                    <td id="d1"></td>
+                    <td id="d2"></td>
+                    <td id="d3"></td>
+                    <td id="d4"></td>
+                    <td id="d5"></td>
+                    <td id="d6"></td>
+                </tr>
+                <tr>
+                    <td id="d7"></td>
+                    <td id="d8"></td>
+                    <td id="d9"></td>
+                    <td id="d10"></td>
+                    <td id="d11"></td>
+                    <td id="d12"></td>
+                    <td id="d13"></td>
+                </tr>
+                <tr>
+                    <td id="d14"></td>
+                    <td id="d15"></td>
+                    <td id="d16"></td>
+                    <td id="d17"></td>
+                    <td id="d18"></td>
+                    <td id="d19"></td>
+                    <td id="d20"></td>
+                </tr>
+                <tr>
+                    <td id="d21"></td>
+                    <td id="d22"></td>
+                    <td id="d23"></td>
+                    <td id="d24"></td>
+                    <td id="d25"></td>
+                    <td id="d26"></td>
+                    <td id="d27"></td>
+                </tr>
+                <tr>
+                    <td id="d28"></td>
+                    <td id="d29"></td>
+                    <td id="d30"></td>
+                    <td id="d31"></td>
+                    <td id="d32"></td>
+                    <td id="d33"></td>
+                    <td id="d34"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentYear = 2024; // 현재 년도
+        let currentMonth = 9; // 현재 월 (10월)
+
+        function set1(year, month) {
+            let startDay = new Date(year, month, 1).getDay();
+            let lastDay = new Date(year, month + 1, 0).getDate();
+
+            // 제목에 현재 연도와 날짜를 표시
+            const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+            $("#calendarTitle").text(year + "년 " + monthNames[month]); // 제목 업데이트
+
+            // 모든 셀을 비웁니다.
+            for (let i = 0; i < 35; i++) {
+                $("#d" + i).empty();
+            }
+
+            // 날짜를 달력에 채우기
+            for (let day = 1; day <= lastDay; day++) {
+                let cellIndex = startDay + day - 1;
+                $("#d" + cellIndex).append(day);
+            }
+
+            // 현재 연도와 월을 콘솔에 출력
+            console.log(year + "년 " + monthNames[month]);
+        }
+
+        // 달력을 처음 설정
+        set1(currentYear, currentMonth);
+
+        // 이전 버튼 클릭 이벤트
+        $("#prevButton").on("click", function() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11; // 12월로 넘어가는 경우
+                currentYear--; // 년도를 하나 줄임
+            }
+            set1(currentYear, currentMonth);
+        });
+
+        // 다음 버튼 클릭 이벤트
+        $("#nextButton").on("click", function() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0; // 1월로 넘어가는 경우
+                currentYear++; // 년도를 하나 올림
+            }
+            set1(currentYear, currentMonth);
+        });
+    </script>
+</body>
+</html>
